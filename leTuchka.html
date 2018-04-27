@@ -4,7 +4,7 @@
 		<!-- Required meta tags -->
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <title>DumbNotepad</title>
+        <title>LeTuchka</title>
 
 		<!-- Bootstrap CSS -->
 		<link rel="stylesheet" href="bootstrap-4.0.0/css/bootstrap.css" />
@@ -23,13 +23,13 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="#" onclick = "Foos.prototype.again();" >Again</a>
+                    <a class="nav-link" href="#" onclick = "command.again();" >Again</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" onclick = "Foos.prototype.fuckOff();" >Fuck off, I'm tired</a>
+                    <a class="nav-link" href="#" onclick = "command.fuckOff();" >Fuck off, I'm tired</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" onclick = "Foos.prototype.getQuestion();" >Skip</a>
+                    <a class="nav-link" href="#" onclick = "command.next();" >Next</a>
                 </li>
             </ul>           
           </div>
@@ -39,7 +39,7 @@
             BODY{
                 background: #aaa;
             }
-            #main_text_area{
+            #wrapper{
                 position: absolute;
                 margin-left: 5%;
                 margin-top: 3%;
@@ -50,10 +50,30 @@
                 font-size: 25px;
                 z-index: 20;
             }
+            #question{
+                height: 100%;
+            }
+            .Variant{
+                overflow: ;
+                font-size: 17px;
+                color: "#777";
+            }
+            .Variant:hover{
+                opacity: 0.6;
+            }
+            .h30{
+                height: 30%;
+            }
         </style>
-
-        <textarea class = "form-control" id = "main_text_area" ></textarea>        
+        <div class = "container" id = "wrapper" >
+            <div class = "container h30" >
+                <textarea class = "form-control" id = "question" readonly></textarea>
+            </div>
+            <dir class = "container" id = "variants" >
+            </dir>           
+        </div>       
 	</body>
 </html>
+
 
 <script src = "classes.js" ></script>
