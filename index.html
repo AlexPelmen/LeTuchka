@@ -12,6 +12,9 @@
 		<!-- jQuery first, then Tether, then Bootstrap JS. -->
 		<script src="jquery.js" ></script>
 		<script src="bootstrap-4.0.0/js/bootstrap.js"></script>
+
+        <!-- Свои стили -->
+        <link rel="stylesheet" href="style.css" />
 	</head>
 	<body>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -35,45 +38,29 @@
           </div>
         </nav>
 
-         <style>
-            BODY{
-                background: #aaa;
-            }
-            #wrapper{
-                position: absolute;
-                margin-left: 5%;
-                margin-top: 3%;
-                padding: 2%;
-                width: 90%;
-                height: 80%;
-                
-                font-size: 25px;
-                z-index: 20;
-            }
-            #question{
-                height: 100%;
-            }
-            .Variant{
-                overflow: ;
-                font-size: 17px;
-                color: "#777";
-            }
-            .Variant:hover{
-                opacity: 0.6;
-            }
-            .h30{
-                height: 30%;
-            }
-        </style>
+        <button class = "btn btn-primary w-25 mt-5 mx-auto d-block" id = "confirmBtn" onclick = "command.confirm();" >Ответить</button>
         <div class = "container" id = "wrapper" >
             <div class = "container h30" >
-                <textarea class = "form-control" id = "question" readonly></textarea>
+                <textarea class = "form-control row" id = "question" readonly></textarea>
             </div>
-            <dir class = "container" id = "variants" >
-            </dir>           
-        </div>       
+            <div class = "container" id = "variants" >
+            </div>           
+        </div>      
 	</body>
 </html>
 
 
+<!-- Окно для вывода результата -->
+<div class = "container card text-center" id = "resultWindow" >
+    <h2 class = "text-primary">Результаты</h2>
+    <hr/>
+    <p>Ты ответил правильно <span id = "resultRightAnswers" ></span></p>
+    <p class = "text-primary" >Твой статус: <span id = "resultStatus"></span></p>
+    <hr/>
+    <p>Хочешь еще разок?</p>
+    <button class = "btn btn-primary d-block w-50 mx-auto" onclick = "command.again()" >Канеш)</button>
+</div> 
+
+
+<script src = "nicknames.js" ></script>
 <script src = "classes.js" ></script>

@@ -15,6 +15,8 @@ class Application{
     	this.currentQuestion = null;
     	//Ответы, отмеченные пользователем
     	this.answered = [];
+    	//Разрешение на ответ
+    	this.allowAnswer = true;
 	}
 	loading(){
 		//Загружаем из файла текст теста
@@ -29,13 +31,22 @@ class Application{
 	        		app.questions.push( parser.variants( t ) );
 	        	})
 	        	this.currentQuestion = app.questions[0];
+	        	var col = this.currentQuestion.right.length;
+				while( col-- )
+					app.answered.push( false );
 	        }
 	    })
 	}
 	getNextQuestion(){
 		//Переключаемся на следующий вопрос
-		if( this.step < this.questions.length - 1 )
+		if( this.step < this.questions.length - 1 ){
 			this.currentQuestion = this.questions[ ++this.step ];
+			this.allowAnswer = true;
+			var col = this.currentQuestion.right.length;
+			this.answered = [];
+			while( col-- )
+				this.answered.push( false );
+		}
 	}
 	shuffle(){
 		//Перетасовывает вопросы
@@ -47,6 +58,8 @@ class Application{
 		this.step = 0;
 		this.rightAnswers = 0;
 		this.wrongAnswers = 0;
+		this.allowAnswer = true;
+		graph.resultWindow.style.visibility = "hidden"; 
 	}
 }
 
@@ -189,19 +202,24 @@ var rand = ( a, b ) => { return Math.random() - 0.5; }
 class Commands{
 	//Следующий вопрос
     next(){
+    	//Кнопка confirm
+    	graph.confirmBtn.onclick = command.confirm;
+    	graph.confirmBtn.innerHTML = "Ответить";
+
         if( app.step < app.questions.length - 1 ){
+        	if( app.allowAnswer ) app.wrongAnswers++; 
             app.getNextQuestion();
             graph.outputCurrentQuestion();
         }
         else
-        	alert( "Wow, you mazafucker, It's Great!!!\n Right: " + app.rightAnswers + "\n Wrong: " + app.wrongAnswers ) ;            
-    }
+        	if( graph.resultWindow.style.visibility != "visible" )
+				graph.showResultWindow();        
+	}
     //Заново
     again(){
     	app.reset();
         app.shuffle();      
         graph.outputCurrentQuestion();
-        alert( "Come on! You must check it!" );
     }
     //Я устал( рудимент )
     fuckOff(){
@@ -209,20 +227,39 @@ class Commands{
     }
     //Какой-либо ответ
     answer( a ){
+    	//Можно ли отвечать
+    	if( ! app.allowAnswer ) return;
+
         var mask = app.currentQuestion.right;
-        var ans_div = $( "#answer" + a )[0];
-        graph.cssRemoveClass( ans_div, "bg-primary" );
-        //Если ответ правильный
-        if( mask[ a ] ){
-            graph.cssAddClass( ans_div, "bg-success" );
-            app.rightAnswers++;
+        var ansSel = $( "#answerSelector" + a )[0];
+        if( app.answered[ a ] ){
+        	app.answered[ a ] = false;
+	        ansSel.style.visibility = "hidden";        
         }
         else{
-        	//или не правильный
-            graph.cssAddClass( ans_div, "bg-danger" );
-            app.wrongAnswers++;
+        	app.answered[ a ] = true;
+        	ansSel.style.visibility = "visible";              
         }
     }
+    confirm(){
+    	if( app.allowAnswer ){
+    		//Как подтверждение ответов
+	    	var mask = app.currentQuestion.right; 
+
+	    	var allright = true; 
+	    	for( var i = 0; i < mask.length; i++ )
+	    		if( mask[i] != app.answered[i] )
+	    			allright = false;
+	    	if( allright )
+				app.rightAnswers++;
+			else
+				app.wrongAnswers++;
+			graph.markQuestions();
+			app.allowAnswer = false;
+			graph.confirmBtn.onclick = command.next;
+			graph.confirmBtn.innerHTML = "Далее";
+		}
+	}
 }
 
 //Класс для вывода данных
@@ -232,8 +269,15 @@ class Graph{
 		this.question_div = $( "#question" )[0];
 		//Div для вариантов ответа
 		this.variants_div = $( "#variants" )[0];
+		//Кнопка confirm
+		this.confirmBtn = $( "#confirmBtn" )[0];
+		//Окно с результатами
+		this.resultWindow = $( "#resultWindow" )[0];
+		//Переменная для вывода прав. ответов
+		this.resultRightAnswers = $( "#resultRightAnswers" )[0];
+		//Переменная для вывода статуса
+		this.resultStatus = $( "#resultStatus" )[0];
 	}
-
 	//Выводит текущий вопрос
 	outputCurrentQuestion(){
 		//Варианты ответа
@@ -247,7 +291,6 @@ class Graph{
 	    for( var i = 1; i < qVars.length; i++ )  //с единицы, потому что в 0 лежит вопрос           
 	        this.addVariant( i, qVars[i] );    
 	}
-
 	//Удаляет css-класс
 	cssRemoveClass( obj, cl ){
 		obj.classList.remove( cl );
@@ -264,11 +307,61 @@ class Graph{
 	}
 	//Устанавливает вариант ответа (один)
 	addVariant( i, text ){
-		this.variants_div.innerHTML += "<div id = 'answer" + i + "' class = 'Variant bg-primary rounded text-white w-100 my-2 p-3' onclick = 'command.answer(" + i + ")' >" + text + "</div>\n";
+		this.variants_div.innerHTML += 
+			"<div id = 'answer" + i + "' class = 'Variant row rounded text-white w-100 my-2 p-3' onclick = 'command.answer(" + i + ")' >\n" + 
+				"<span class = 'col-10'>" + text + "</span>\n" +
+				"<div class = 'col-1' >\n" +
+					"<img src = 'check.png' id = 'answerSelector" + i + "' class = 'Check rounded-circle bg-warning p-3' />\n" +
+				"</div>\n" +
+			"</div>\n";
 	}
 	//Очищает div вариантов
 	clearVariants(){
 		this.variants_div.innerHTML = "";
+	}
+	//Отмечает правильные и неправильные вопросы
+	markQuestions(){
+		var mask = app.currentQuestion.right;
+		for( var i = 1; i < mask.length; i++ ){
+			var ans = $( "#answer" + i )[0];
+			var ansSel = $( "#answerSelector" + i )[0];
+			
+			//Красим варианты
+			graph.cssRemoveClass( ans, "bg-primary" );
+			if( mask[i] )
+				graph.cssAddClass( ans, "bg-success" );
+			else
+				graph.cssAddClass( ans, "bg-danger" );
+
+			//Красим галочки
+			graph.cssRemoveClass( ansSel, "bg-warning" );
+			if( mask[i] == app.answered[i] ){
+				ansSel.src = "check.png";				
+				ansSel.style.background = "#179634";
+			}
+			else{
+				ansSel.src = "cross.png";
+				ansSel.style.background = "#cb2434";
+			}
+		}
+	}
+	showResultWindow(){
+		var all = app.rightAnswers + app.wrongAnswers;
+		var scoreText = app.rightAnswers + " / " + all;
+		this.resultRightAnswers.innerHTML = scoreText;
+
+		var i = 0;
+		var wrong = app.wrongAnswers;
+		if( wrong == 0 ) i = 0;
+		else if( wrong <= 1) i = 1;
+		else if( wrong <= 2) i = 2;
+		else if( wrong <= 4) i = 3;
+		else if( wrong <= 6) i = 4;
+		else  i = 5;
+
+		var status = nicknames[i][ Math.floor( Math.random() * nicknames[i].length ) ]; 
+		this.resultStatus.innerHTML = status;
+		this.resultWindow.style.visibility = "visible"; 
 	}
 }
 

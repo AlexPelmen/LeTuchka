@@ -1,0 +1,56 @@
+BODY{
+    background: #aaa;
+}
+#wrapper{
+    position: absolute;
+    margin-left: 5%;
+    margin-top: 3%;
+    padding: 2%;
+    width: 90%;
+    height: 80%;
+    
+    font-size: 25px;
+    z-index: 20;
+}
+#question{
+    height: 100%;
+}
+.Variant{
+    background: #007bff;
+    font-size: 17px;
+}
+.Variant:hover{
+    background: #008cff;
+    cursor: pointer;
+}
+.h30{
+    height: 30%;
+}
+.Check{
+    width: 64px;
+    height: 64px;
+    margin-top: -70%;
+    visibility: hidden;
+}
+
+
+
+/*Окно результата*/
+#resultWindow{
+    background: #e7e8e9;
+    position: absolute;
+    width: 50%;
+    z-index: 30;
+    left: 25%;
+    top: 25%;
+    padding: 3%;
+    visibility: hidden;
+
+    color: #495057;
+    font-family: "Segoe UI";
+}
+
+#resultWindow h2{
+    font-family: "Segoe UI";
+    font-weight: 400;
+}
