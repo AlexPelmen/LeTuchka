@@ -106,7 +106,7 @@ class Parser{
                     var col = qBuf.length - numflag.length - 1;                       
                     RES.push( qBuf.substr( 0, col ) ); 
 
-                    qBuf = qBuf.substr( col, qBuf.length );
+                    qBuf = "";
                     var eolflag = false;
                     var numflag = ""; 
                 }
@@ -177,7 +177,7 @@ class Parser{
 	                else
 	                    right.push( false );
 
-	                vBuf = vBuf.substr( vBuf.length - 3, vBuf.length );
+	                vBuf = "";
 	                eolflag = false;
 	                varflag = "";
 	                rightFlag = false;

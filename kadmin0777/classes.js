@@ -127,14 +127,14 @@ class ColorParser{
 	            		cl += (curCol + 1); //Цифра в конце названия класса
 	            	}
 	            	
-	            	coloredText += "<span class = '" + cl + "' >" + vBuf.substr( 0, vBuf.length - 7 ) + "</span>";
+	            	coloredText += "<span class = '" + cl + "' >" + vBuf.substr( 0, vBuf.length - 7 ) + "</span>" + vBuf.substr( vBuf.length - 8, vBuf.length );
 	            	
 	            	if( curCol ) 
 	            		curCol = false;
 	            	else
 	            		curCol = true;	                
 
-	                vBuf = vBuf.substr( vBuf.length - 8, vBuf.length ); //То, что обрезали
+	                vBuf = ""; //То, что обрезали
 	                eolflag = false;
 	                varflag = "";
 	                rightFlag = false;

@@ -32,7 +32,7 @@
 	          <div class="collapse navbar-collapse" id="navbarSupportedContent">
 	            <ul class="navbar-nav mr-auto">
 	        		<li class = "nav-item">
-	            		<a href = "list.php" class = "nav-link mx-5" >Назад</a>
+	            		<a href = "editTest.php?file=<?php echo $_GET[ 'file' ]; ?>" class = "nav-link mx-5" >Назад</a>
 	            	</li>
 	            </ul>           
 	          </div>

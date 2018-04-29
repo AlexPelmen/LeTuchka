@@ -36,14 +36,18 @@
 
 	            	<li class = "nav-item" >
 	            		<input type = "submit" class = "nav-link btn text-white btn-primary mx-5 px-5" value = "Сохранить" />
-	            	</li>           	
+	            	</li>
+
+	            	<li class = "nav-item">
+	        			<a href = "checkParser.php?file=<?php echo $_GET[ 'file' ]; ?>" class = "nav-link mx-5" >Проверить парсер</a>
+	        		</li>          	
 	            	
 	        		<li class = "nav-item">
-	        			<a href = "#" class = "nav-link mx-5" >Удалить</a>
+	        			<a href = "delete.php?file=<?php echo $_GET[ 'file' ]; ?>" class = "nav-link mx-5" >Удалить</a>
 	        		</li>
 
 	        		<li class = "nav-item">
-	            		<a href = "#" class = "nav-link mx-5" >Назад</a>
+	            		<a href = "list.php" class = "nav-link mx-5" >Назад</a>
 	            	</li>
 	            </ul>           
 	          </div>
@@ -56,8 +60,10 @@
 	        		width: 100%;
 	        	}
 	    	</style>
+
+	    	<input type = "hidden" name = "file" value = '<?php echo $file; ?>' />
 	             	
-        	<textarea class = "form-contents w-100 px-5" id= "textFile" ><?php echo $data; ?></textarea>
+        	<textarea class = "form-contents w-100 px-5" id= "textFile" name = "data" ><?php echo $data; ?></textarea>
         	
         </form>      
 	</body>
