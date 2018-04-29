@@ -106,7 +106,7 @@ class Parser{
                     var col = qBuf.length - numflag.length - 1;                       
                     RES.push( qBuf.substr( 0, col ) ); 
 
-                    qBuf = "";
+                    qBuf = qBuf.substr( col, qBuf.length );
                     var eolflag = false;
                     var numflag = ""; 
                 }
@@ -155,7 +155,7 @@ class Parser{
 	            else
 	                right.push( false );
 
-	            variants.push( vBuf.substr( 0, vBuf.length ) );
+	            variants.push( vBuf );
 	            break; 
 	        }
 	        //Если \n символ
@@ -177,7 +177,7 @@ class Parser{
 	                else
 	                    right.push( false );
 
-	                vBuf = "";
+	                vBuf = vBuf.substr( vBuf.length - 3, vBuf.length );
 	                eolflag = false;
 	                varflag = "";
 	                rightFlag = false;
@@ -311,7 +311,7 @@ class Graph{
 			"<div id = 'answer" + i + "' class = 'Variant row rounded text-white w-100 my-2 p-3' onclick = 'command.answer(" + i + ")' >\n" + 
 				"<span class = 'col-10'>" + text + "</span>\n" +
 				"<div class = 'col-1' >\n" +
-					"<img src = 'check.png' id = 'answerSelector" + i + "' class = 'Check rounded-circle bg-warning p-3' />\n" +
+					"<img src = 'img/check.png' id = 'answerSelector" + i + "' class = 'Check rounded-circle bg-warning p-3' />\n" +
 				"</div>\n" +
 			"</div>\n";
 	}
@@ -336,11 +336,11 @@ class Graph{
 			//Красим галочки
 			graph.cssRemoveClass( ansSel, "bg-warning" );
 			if( mask[i] == app.answered[i] ){
-				ansSel.src = "check.png";				
+				ansSel.src = "img/check.png";				
 				ansSel.style.background = "#179634";
 			}
 			else{
-				ansSel.src = "cross.png";
+				ansSel.src = "img/cross.png";
 				ansSel.style.background = "#cb2434";
 			}
 		}
@@ -364,9 +364,6 @@ class Graph{
 		this.resultWindow.style.visibility = "visible"; 
 	}
 }
-
-//Путь к файлу с вопросами
-var path = "file.txt";
 
 //loading
 var app = new Application;

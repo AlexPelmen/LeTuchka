@@ -61,6 +61,9 @@
     <button class = "btn btn-primary d-block w-50 mx-auto" onclick = "command.again()" >Канеш)</button>
 </div> 
 
+<?php 
+    echo "<script>var path = 'Tests/{$_GET[ "file" ]}'</script>";
+?>
 
 <script src = "nicknames.js" ></script>
 <script src = "classes.js" ></script>
