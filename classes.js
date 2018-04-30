@@ -17,15 +17,19 @@ class Application{
     	this.answered = [];
     	//Разрешение на ответ
     	this.allowAnswer = true;
+    	//Маска файла
+    	this.fileMask = [];
 	}
 	loading(){
 		//Загружаем из файла текст теста
 	    $.ajax({
 	        type: "POST",
-	        data: "file="+path,
+	        data: "file=Tests/"+path,
 	        url: "scripts/load.php",
 	        async: false,
 	        success( data ){
+	        	//Проверяем, есть ли маска
+	        	app.getFileMask( path );
 	        	var texts = parser.questions( data );
 	        	texts.forEach(( t )=>{
 	        		app.questions.push( parser.variants( t ) );
@@ -60,6 +64,35 @@ class Application{
 		this.wrongAnswers = 0;
 		this.allowAnswer = true;
 		graph.resultWindow.style.visibility = "hidden"; 
+	}
+	getFileMask( file ){
+		//Получаем маску текущего теста
+		var path = "Tests/Mask/" + file;
+		$.ajax({
+			type: "POST",
+			data: path,
+			url: "scripts/load.php";
+			success( data ){
+				if( data )
+					app.fileMask = app.parseFileMask( data );
+			}			
+		})
+	}
+	parseFileMask( data ){
+		//Парсит маску
+		if( ! data ) return false;
+		var masks = [];
+		for( var i = 0; i < data.length; i++ ){
+			var c = data[ i ];
+			var mBuf += c;
+			if( c == "|" ){
+				masks.push( mBuf );
+				mBuf = "";
+			}
+			if( c == data.length - 1 ) 	//Последний символ
+				masks.push( mBuf );
+		}
+		return masks;
 	}
 }
 
@@ -102,7 +135,7 @@ class Parser{
                     continue;
                 }
                 //Если мы нашли начало нового вопроса
-                else if( c == "." && eolflag && numflag ){                        
+                else if( c == "." && eolflag && numflag ){                       
                     var col = qBuf.length - numflag.length - 1;                       
                     RES.push( qBuf.substr( 0, col ) ); 
 
@@ -150,10 +183,13 @@ class Parser{
 	        //Если последний символ
 	        if( i == last ){
 
-	            if( rightFlag )
-	                right.push( true );
-	            else
-	                right.push( false );
+	        	if( ! fileMask )
+		            if( rightFlag )
+		                right.push( true );
+		            else
+		                right.push( false );
+		        else
+		        	//Косяк
 
 	            variants.push( vBuf );
 	            break; 

@@ -26,13 +26,13 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="#" onclick = "command.again();" >Again</a>
+                    <a class="nav-link" href="#" onclick = "command.again();" >Занаво</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" onclick = "command.fuckOff();" >Fuck off, I'm tired</a>
+                    <a class="nav-link" href="index.php" >Назад</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" onclick = "command.next();" >Next</a>
+                    <a class="nav-link" href="#" onclick = "command.next();" >Пропустить</a>
                 </li>
             </ul>           
           </div>
@@ -62,7 +62,7 @@
 </div> 
 
 <?php 
-    echo "<script>var path = 'Tests/{$_GET[ "file" ]}'</script>";
+    echo "<script>var path = '{$_GET[ "file" ]}'</script>";
 ?>
 
 <script src = "nicknames.js" ></script>

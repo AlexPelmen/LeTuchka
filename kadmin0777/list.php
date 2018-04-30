@@ -25,7 +25,7 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent"> 
           	<ul class="navbar-nav mr-auto">            	
         		<li class = "nav-item">
-            		<a href = "../list.php" class = "nav-link mx-5" >В Пользовательскую версию</a>
+            		<a href = "../index.php" class = "nav-link mx-5" >В Пользовательскую версию</a>
             	</li>
             </ul>        
           </div>
